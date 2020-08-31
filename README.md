@@ -1,10 +1,23 @@
+Requirements
+1 - The submitted data set is tidy.  
+        This is the data table:  "tidybySubjectIDandActivity"
+2 - The Github repo contains the required scripts.
+        See the file "run_analysis.R" in this repository
+3 - GitHub contains a code book that modifies and updates the available codebooks with the data to indicate all the variables and summaries calculated, along with units, and any other relevant information.
+        See posted "CodeBook_run_analysis" in this repository
+4 - The README that explains the analysis files is clear and understandable.
+        You're reading it!
+5 - The work submitted for this project is the work of the student who submitted it.
+        Clearly!
+
+-----------------------
 # Getting-and-Cleaning-Data-Wk-4-Project
 #Here are the data for the project:
 #https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
 #You should create one R script called run_analysis.R that does the following.
 
-#1.  Merges the training and the test sets to create one data set.
+##### 1.  Merges the training and the test sets to create one data set.
 
 install.packages("data.table")
 setwd("~/Desktop/Data_Science/Getting and Cleaning Data/UCI HAR Dataset")
@@ -32,7 +45,7 @@ test_data_all <- cbind(test_subjects, test_activities, test_data)
 ## but now will have 2,947 + 7,352 = 10,299 data points/rows)
 test_and_training <- rbind(training_data_all, test_data_all)
 
-#2.  Extracts only the measurements on the mean and standard deviation 
+##### 2.  Extracts only the measurements on the mean and standard deviation 
 #    for each measurement.
 
 ## The names of each of the columns in "test_and_training" are listed in the 
@@ -57,7 +70,7 @@ mean_std_data_total <- test_and_training_minus12[, mean_std_data_index]
 first_two_columns <- test_and_training[,1:2] 
 mean_std_data_total2 <- cbind(first_two_columns, mean_std_data_total)
 
-#3.  Uses descriptive activity names to name the activities in the data set
+##### 3.  Uses descriptive activity names to name the activities in the data set
 
 ## This means I need to replace the 1, 2, 3, 4, 5, and 6 in the 2nd Column
 ## (column name = "Activity"), with the labels defined in "activity_labels.txt"
@@ -66,10 +79,6 @@ mean_std_data_total2 <- cbind(first_two_columns, mean_std_data_total)
 ## name.  1 = Walking, 2 = Walking_Upstairs, 3 = Walking_Downstairs, 4 = Sitting, 
 ## 5 = Standing, and 6 = Laying.  
 
-####this part I want to be able to use but wasn't able to figure it out.
-####lookuptable <- read.table("./activity_labels.txt", col.names = c("Activity",
-####        "activity_description"))
-
 mean_std_data_total2$Activity = gsub("1", "walking", mean_std_data_total2$Activity)
 mean_std_data_total2$Activity = gsub("2", "walking_upstairs", mean_std_data_total2$Activity)
 mean_std_data_total2$Activity = gsub("3", "walking_downstairs", mean_std_data_total2$Activity)
@@ -77,7 +86,7 @@ mean_std_data_total2$Activity = gsub("4", "sitting", mean_std_data_total2$Activi
 mean_std_data_total2$Activity = gsub("5", "standing", mean_std_data_total2$Activity)
 mean_std_data_total2$Activity = gsub("6", "laying", mean_std_data_total2$Activity)
 
-#4.  Appropriately labels the data set with descriptive variable names.
+##### 4.  Appropriately labels the data set with descriptive variable names.
 
 ## So I need to use the variable names in "features.txt" and name the columns
 ## accordingly (only of the ones with mean or std in the term!).  I'll call the
@@ -86,8 +95,8 @@ mean_std_data_total2$Activity = gsub("6", "laying", mean_std_data_total2$Activit
 finaltable <- mean_std_data_total2
 colnames(finaltable)[3:88] <- features$feature_name[mean_std_data_index]
 
-#5.  From the data set in step 4, creates a second, independent tidy data set 
-#    with the average of each variable for each activity and each subject.
+##### 5.  From the data set in step 4, creates a second, independent tidy data set with the 
+## average of each variable for each activity and each subject.
 
 ## Using the "aggregate function"
 tidybySubjectIDandActivity <- aggregate(finaltable[,3:88], by=list(SubjectID = 
